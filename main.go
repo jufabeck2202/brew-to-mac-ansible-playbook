@@ -38,6 +38,8 @@ func main() {
 			return nil
 		},
 	})
+	// app.Run(nil)
+
 	file, err := os.Open("./Brewfile")
 
 	if err != nil {
