@@ -43,130 +43,14 @@ dotfiles_files:
   - .gitconfig
 
 homebrew_installed_packages:
-  # zsh packages
-  - history-substring-search     
-  - zsh-autosuggestions
-  - doxygen
-  - pure
-  - gettext
-
 homebrew_taps:
-  - adoptopenjdk/openjdk
-  - create-go-app/cli
-  - elastic/tap
-  - ethereum/ethereum
-  - hashicorp/tap
-  - hivemq/mqtt-cli
-  - homebrew/bundle
-  - homebrew/cask
-  - homebrew/cask-drivers
-  - homebrew/cask-fonts
-  - homebrew/cask-versions
-  - homebrew/core
-  - homebrew/services
-  - jckuester/tap
-  - linuxkit/linuxkit
-  - melonamin/formulae
-  - nakabonne/ali
-  - robotsandpencils/made
-  - tinygo-org/tools
-  - ubuntu/microk8s
-  - vapor/tap
-
 homebrew_cask_appdir: /Applications
 homebrew_cask_apps:
-  - chromedriver
-  - handbrake
-  - licecap
-  - sequel-ace
-  - slack
-  - sublime-text
-  - transmit
-  - vagrant
-  - 1password
-  - adoptopenjdk8
-  - balenaetcher
-  - dbeaver-community
-  - discord
-  - docker
-  - fing-cli
-  - firefox
-  - flux
-  - font-source-code-pro
-  - gimp
-  - google-chrome
-  - grandperspective
-  - ishowu
-  - iterm2
-  - java
-  - jdownloader
-  - jetbrains-toolbox
-  - macdown
-  - microsoft-teams
-  - ngrok
-  - obs
-  - openscad
-  - qlcolorcode
-  - qlimagesize
-  - qlmarkdown
-  - qlstephen
-  - qlvideo
-  - quicklook-json
-  - quicklookase
-  - redisinsight
-  - snipaste
-  - spotify
-  - steam
-  - tower
-  - transmission
-  - vlc
-  - vscodium
-  - webpquicklook
+
 
 
 # See `geerlingguy.mas` role documentation for usage instructions.
 mas_installed_apps: 
-  - 1491071483  
-  - 1524366536  
-  - 1402042596  
-  - 1503879351  
-  - 1349784180  
-  - 651952889   
-  - 1116599239  
-  - 425264550   
-  - 824171161   
-  - 1406832001  
-  - 360593530   
-  - 1044549675  
-  - 1496833156  
-  - 1507556912  
-  - 570549457   
-  - 1487937127  
-  - 1477089520  
-  - 1388020431  
-  - 1458220908  
-  - 1044484672  
-  - 441258766   
-  - 1351639930  
-  - 1191449274  
-  - 425424353   
-  - 1504940162  
-  - 1586435171  
-  - 1295203466  
-  - 939343785   
-  - 1505603580  
-  - 409201541   
-  - 1444383602  
-  - 640199958   
-  - 1564578427  
-  - 1518425043  
-  - 457622435   
-  - 1294126402  
-  - 1289197285  
-  - 409203825   
-  - 409183694   
-  - 1217419133  
-  - 1494023538  
 mas_email: "ju-fa-beck@t-online.de"
 mas_password: ""
 

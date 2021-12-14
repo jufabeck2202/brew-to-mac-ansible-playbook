@@ -1,0 +1,256 @@
+---
+downloads: ~/.ansible-downloads/
+#sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc --skip-chsh
+configure_dotfiles: true
+configure_osx: true
+
+# Set to 'true' to configure the Dock via dockutil.
+configure_dock: true
+dockitems_remove: 
+  - Maps
+  - Contacts
+  - TV
+  - Podcasts
+# - Launchpad
+# - TV
+# - Podcasts
+# - 'App Store'
+dockitems_persist: 
+# - name: "Sublime Text"
+#   path: "/Applications/Sublime Text.app/"
+#   pos: 5
+  - name: Finder
+    pos: 1
+
+configure_sudoers: false
+sudoers_custom_config: ''
+# Example:
+# sudoers_custom_config: |
+#   # Allow users in admin group to use sudo with no password.
+#   %admin ALL=(ALL) NOPASSWD: ALL
+
+dotfiles_repo: https://github.com/jufabeck2202/dotfiles-ansible
+dotfiles_repo_accept_hostkey: true
+dotfiles_repo_local_destination: ~/Development/dotfiles
+dotfiles_files:
+  - .zshrc
+  - .gitignore
+  - .inputrc
+  - .osx
+  - .vimrc
+  - .aliases
+  - .docker-aliases
+  - .gitconfig
+
+homebrew_installed_packages:
+  - aircrack-ng    #added 2021-12-14
+  - annie    #added 2021-12-14
+  - xz    #added 2021-12-14
+  - ansible    #added 2021-12-14
+  - apache-spark    #added 2021-12-14
+  - node    #added 2021-12-14
+  - apollo-cli    #added 2021-12-14
+  - aria2    #added 2021-12-14
+  - asciinema    #added 2021-12-14
+  - autoconf    #added 2021-12-14
+  - automake    #added 2021-12-14
+  - autossh    #added 2021-12-14
+  - awscli    #added 2021-12-14
+  - azure-cli    #added 2021-12-14
+  - bash-completion    #added 2021-12-14
+  - bat    #added 2021-12-14
+  - bazel    #added 2021-12-14
+  - binutils    #added 2021-12-14
+  - glib    #added 2021-12-14
+homebrew_taps:
+  - adoptopenjdk/openjdk    #
+  - create-go-app/cli    #
+  - elastic/tap    #
+  - ethereum/ethereum    #
+  - hashicorp/tap    #
+  - hivemq/mqtt-cli    #
+  - homebrew/bundle    #
+  - homebrew/cask    #
+  - homebrew/cask-drivers    #
+  - homebrew/cask-fonts    #
+  - homebrew/cask-versions    #
+  - homebrew/core    #
+  - homebrew/services    #
+  - jckuester/tap    #
+  - linuxkit/linuxkit    #
+  - melonamin/formulae    #
+  - nakabonne/ali    #
+  - robotsandpencils/made    #
+  - tinygo-org/tools    #
+  - ubuntu/microk8s    #
+  - vapor/tap    #
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+
+
+
+# See `geerlingguy.mas` role documentation for usage instructions.
+  - 1password    #
+  - adobe-acrobat-reader    #
+  - adoptopenjdk8    #
+  - anaconda    #
+  - anki    #
+  - arduino    #
+  - arduino-ide-beta    #
+  - aria2gui    #
+  - balenaetcher    #
+  - burp-suite    #
+  - calibre    #
+  - cheatsheet    #
+  - clipy    #
+  - dbeaver-community    #
+  - discord    #
+  - docker    #
+  - dozer    #
+  - filebot    #
+  - fing-cli    #
+  - firefox    #
+  - flux    #
+  - folx    #
+  - font-source-code-pro    #
+  - gimp    #
+  - google-backup-and-sync    #
+  - google-chrome    #
+  - grandperspective    #
+  - hyper    #
+  - ishowu    #
+  - iterm2    #
+  - java    #
+  - jdownloader    #
+  - jetbrains-toolbox    #
+  - macdown    #
+  - mactex    #
+  - microsoft-auto-update    #
+  - microsoft-office    #
+  - microsoft-teams    #
+  - multipass    #
+  - netnewswire    #
+  - ngrok    #
+  - obs    #
+  - openscad    #
+  - paw    #
+  - plex-media-server    #
+  - postman    #
+  - protege    #
+  - pulse    #
+  - qlcolorcode    #
+  - qlimagesize    #
+  - qlmarkdown    #
+  - qlstephen    #
+  - qlvideo    #
+  - quicklook-json    #
+  - quicklookase    #
+  - redisinsight    #
+  - rescuetime    #
+  - skype    #
+  - snipaste    #
+  - sourcetree    #
+  - spotify    #
+  - steam    #
+  - suspicious-package    #
+  - swiftbar    #
+  - synology-drive    #
+  - tower    #
+  - transmission    #
+  - ultimaker-cura    #
+  - unity-hub    #
+  - vlc    #
+  - vscodium    #
+  - webpquicklook    #
+  - xtorrent    #
+  - zotero    #
+mas_installed_apps: 
+  - 1586435171    #1586435171
+  - 1402042596    #1402042596
+  - 824171161    #824171161
+  - 824183456    #824183456
+  - 1044484672    #1044484672
+  - 1477089520    #1477089520
+  - 1518425043    #1518425043
+  - 1487937127    #1487937127
+  - 1524366536    #1524366536
+  - 1388020431    #1388020431
+  - 640199958    #640199958
+  - 425264550    #425264550
+  - 1044549675    #1044549675
+  - 1406832001    #1406832001
+  - 1351639930    #1351639930
+  - 1444383602    #1444383602
+  - 1294126402    #1294126402
+  - 1503879351    #1503879351
+  - 939343785    #939343785
+  - 1564578427    #1564578427
+  - 409183694    #409183694
+  - 441258766    #441258766
+  - 1458220908    #1458220908
+  - 1295203466    #1295203466
+  - 1289197285    #1289197285
+  - 1217419133    #1217419133
+  - 1116599239    #1116599239
+  - 360593530    #360593530
+  - 409203825    #409203825
+  - 409201541    #409201541
+  - 651952889    #651952889
+  - 1505603580    #1505603580
+  - 1494023538    #1494023538
+  - 1496833156    #1496833156
+  - 1504940162    #1504940162
+  - 570549457    #570549457
+  - 425424353    #425424353
+  - 1191449274    #1191449274
+  - 1491071483    #1491071483
+  - 1349784180    #1349784180
+  - 1507556912    #1507556912
+  - 457622435    #457622435
+mas_email: "ju-fa-beck@t-online.de"
+mas_password: ""
+
+osx_script: "~/.osx --no-restart"
+
+# Install packages from other package managers.
+# Note: You are responsible for making sure the required package managers are
+# installed, eg. through homebrew.
+composer_packages: []
+# - name: drush
+#   state: present # present/absent, default: present
+#   version: "^8.1" # default: N/A
+gem_packages: []
+# - name: bundler
+#   state: present # present/absent/latest, default: present
+#   version: "~> 1.15.1" # default: N/A
+npm_packages: 
+  - name: localtunnel
+  - name: nodemon
+# - name: webpack
+#   state: present # present/absent/latest, default: present
+#   version: "^2.6" # default: N/A
+pip_packages: []
+# - name: mkdocs
+#   state: present # present/absent/latest, default: present
+#   version: "0.16.3" # default: N/A
+
+# Set to 'true' to configure Sublime Text.
+configure_sublime: false
+sublime_base_path: '~/Library/Application Support/Sublime Text'
+sublime_config_path: "Packages/User"
+sublime_package_control:
+  - "DocBlockr"
+  - "Dockerfile Syntax Highlighting"
+  - "FileDiffs"
+  - "GitHub Flavored Markdown Preview"
+  - "Jinja2"
+  - "Package Control"
+  - "PHP-Twig"
+  - "Pretty JSON"
+  - "SublimeLinter"
+  - "SublimeLinter-contrib-yamllint"
+  - "TrailingSpaces"
+  - "WordCount"
+
+# Glob pattern to ansible task files to run after all other tasks are finished.
+post_provision_tasks: []
