@@ -31,9 +31,6 @@ var caskNotInstalled = make([]lineObject, 0)
 var tabsNotInstalled = make([]lineObject, 0)
 var masNotInstalled = make([]lineObject, 0)
 
-var inputFile = "./default.config.empty.yaml"
-var outputFile = "./default.config2.yaml"
-
 type lineObject struct {
 	line       string
 	lineNumber int
@@ -41,12 +38,9 @@ type lineObject struct {
 }
 
 // options for the command
-var exampleOpts = struct {
-	id    int
-	c     string
-	dir   string
-	opt   string
-	names gcli.Strings
+var cliOptions = struct {
+	brewDump      string
+	ansibleConfig string
 }{}
 
 func main() {
@@ -62,29 +56,66 @@ func main() {
 		// ... allow add subcommands
 		Aliases: []string{"p"},
 		Config: func(c *gcli.Command) {
-			// binding options
-			// ...
-			c.IntOpt(&exampleOpts.id, "id", "", 2, "the id option")
-			c.StrOpt(&exampleOpts.c, "config", "c", "value", "the config option")
-			// notice `DIRECTORY` will replace to option value type
-			c.StrOpt(&exampleOpts.dir, "dir", "d", "", "the `DIRECTORY` option")
-			// 支持设置选项短名称
-			c.StrOpt(&exampleOpts.opt, "opt", "o", "", "the option message")
-			// 支持绑定自定义变量, 但必须实现 flag.Value 接口
-			c.VarOpt(&exampleOpts.names, "names", "n", "the option message")
-
-			// binding arguments
-			c.AddArg("arg0", "the first argument, is required", true)
-			// ...
+			c.StrOpt(&cliOptions.ansibleConfig, "ansible", "a", "", "path to your ansible mac playbook")
+			c.StrOpt(&cliOptions.brewDump, "brew", "b", "", "path to your brew dump")
 		},
 		Func: Run,
 	})
 	app.Run(nil)
 }
 
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
+}
+
 func Run(cmd *gcli.Command, args []string) error {
-	brewDump := getBrewDump()
-	ansibleFile := readFile(inputFile)
+	// generate ansible playbook if not defined
+	if cliOptions.ansibleConfig == "" {
+		if fileExists("./default.config.yaml") {
+			cliOptions.ansibleConfig = "./default.config.yaml"
+		}
+		if fileExists("./default.config.yml") {
+			cliOptions.ansibleConfig = "./default.config.yml"
+		}
+		if cliOptions.ansibleConfig != "" {
+			color.Green.Println("Ansible file found located at: " + cliOptions.ansibleConfig)
+		} else {
+			// generate default ansible playbook
+			color.Warn.Prompt("No ansible file found")
+			generateNewFile := interact.Confirm(color.Cyan.Text("Do you want to generate a new ansible playbook?"))
+			if generateNewFile {
+				path, err := os.Getwd()
+				if err != nil {
+					log.Println(err)
+				}
+				// execute command
+				_, err = exec.Command("/bin/sh", "-c", "wget -P "+path+" -O default.config.yaml https://raw.githubusercontent.com/geerlingguy/mac-dev-playbook/master/default.config.yml ").Output()
+				if err != nil {
+					log.Fatal(err)
+				}
+				if fileExists("./default.config.yaml") {
+					cliOptions.ansibleConfig = "./default.config.yaml"
+				}
+			}
+
+		}
+	}
+	brewDump := ""
+	if cliOptions.brewDump != "" {
+		if !fileExists(cliOptions.brewDump) {
+			log.Fatal("Brew dump file not found")
+		}
+		color.Green.Println("Brew dump file found located at: " + cliOptions.brewDump)
+		brewDump = readFile(cliOptions.brewDump)
+	} else {
+		color.Green.Println("No brew dump file found, generating one")
+		brewDump = getBrewDump()
+	}
+	ansibleFile := readFile(cliOptions.ansibleConfig)
 	updatedText := Parse(brewDump, ansibleFile)
 	saveToFile(updatedText)
 	return nil
@@ -177,7 +208,7 @@ func appendToText(text string, packageSuffix string, slice []lineObject) string 
 	return text
 }
 func saveToFile(text string) error {
-	file, err := os.Create(outputFile)
+	file, err := os.Create(cliOptions.ansibleConfig)
 	if err != nil {
 		return err
 	} else {
@@ -225,7 +256,7 @@ func parseBrewFile(brewDump string) {
 }
 
 func readFile(path string) string {
-	currentFile, err := ioutil.ReadFile(inputFile)
+	currentFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}

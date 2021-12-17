@@ -1,26 +1,21 @@
 ---
 downloads: ~/.ansible-downloads/
-#sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc --skip-chsh
+
 configure_dotfiles: true
+configure_terminal: true
 configure_osx: true
 
 # Set to 'true' to configure the Dock via dockutil.
-configure_dock: true
-dockitems_remove: 
-  - Maps
-  - Contacts
-  - TV
-  - Podcasts
+configure_dock: false
+dockitems_remove: []
 # - Launchpad
 # - TV
 # - Podcasts
 # - 'App Store'
-dockitems_persist: 
+dockitems_persist: []
 # - name: "Sublime Text"
 #   path: "/Applications/Sublime Text.app/"
 #   pos: 5
-  - name: Finder
-    pos: 1
 
 configure_sudoers: false
 sudoers_custom_config: ''
@@ -29,29 +24,22 @@ sudoers_custom_config: ''
 #   # Allow users in admin group to use sudo with no password.
 #   %admin ALL=(ALL) NOPASSWD: ALL
 
-dotfiles_repo: https://github.com/jufabeck2202/dotfiles-ansible
+dotfiles_repo: https://github.com/geerlingguy/dotfiles.git
 dotfiles_repo_accept_hostkey: true
-dotfiles_repo_local_destination: ~/Development/dotfiles
+dotfiles_repo_local_destination: ~/Development/GitHub/dotfiles
 dotfiles_files:
   - .zshrc
   - .gitignore
   - .inputrc
   - .osx
   - .vimrc
-  - .aliases
-  - .docker-aliases
-  - .gitconfig
 
 homebrew_installed_packages:
 homebrew_taps:
 homebrew_cask_appdir: /Applications
 homebrew_cask_apps:
-
-
-
-# See `geerlingguy.mas` role documentation for usage instructions.
-mas_installed_apps: 
-mas_email: "ju-fa-beck@t-online.de"
+mas_installed_apps: []
+mas_email: ""
 mas_password: ""
 
 osx_script: "~/.osx --no-restart"
@@ -67,9 +55,7 @@ gem_packages: []
 # - name: bundler
 #   state: present # present/absent/latest, default: present
 #   version: "~> 1.15.1" # default: N/A
-npm_packages: 
-  - name: localtunnel
-  - name: nodemon
+npm_packages: []
 # - name: webpack
 #   state: present # present/absent/latest, default: present
 #   version: "^2.6" # default: N/A
