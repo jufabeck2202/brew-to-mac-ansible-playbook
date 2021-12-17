@@ -1,9 +1,14 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestSum(t *testing.T) {
-	if false {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", "10", 10)
+	output := Run("go", "sum")
+	if output == "" {
+		t.Errorf("Output was empty")
 	}
+	fmt.Println(t.TempDir())
 }

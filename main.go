@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"regexp"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -40,41 +40,76 @@ type lineObject struct {
 	comment    string
 }
 
+// options for the command
+var exampleOpts = struct {
+	id    int
+	c     string
+	dir   string
+	opt   string
+	names gcli.Strings
+}{}
+
 func main() {
 	app := gcli.NewApp()
-	app.Version = "1.0.3"
-	app.Desc = "this is my cli application"
+	app.Version = "1.0.0"
+	app.Desc = "A tool to help you manage your brew and cask installs using ansible"
 	// app.SetVerbose(gcli.VerbDebug)
 
 	app.Add(&gcli.Command{
-		Name: "demo",
+		Name: "parse",
 		// allow color tag and {$cmd} will be replace to 'demo'
-		Desc: "this is a description <info>message</> for {$cmd}",
-		Subs: []*gcli.Command{
-			// ... allow add subcommands
+		Desc: "update your ansible notebook using your current installed brew packages <info>parse</> for {$cmd}",
+		// ... allow add subcommands
+		Aliases: []string{"p"},
+		Config: func(c *gcli.Command) {
+			// binding options
+			// ...
+			c.IntOpt(&exampleOpts.id, "id", "", 2, "the id option")
+			c.StrOpt(&exampleOpts.c, "config", "c", "value", "the config option")
+			// notice `DIRECTORY` will replace to option value type
+			c.StrOpt(&exampleOpts.dir, "dir", "d", "", "the `DIRECTORY` option")
+			// 支持设置选项短名称
+			c.StrOpt(&exampleOpts.opt, "opt", "o", "", "the option message")
+			// 支持绑定自定义变量, 但必须实现 flag.Value 接口
+			c.VarOpt(&exampleOpts.names, "names", "n", "the option message")
+
+			// binding arguments
+			c.AddArg("arg0", "the first argument, is required", true)
+			// ...
 		},
-		Aliases: []string{"dm"},
-		Func: func(cmd *gcli.Command, args []string) error {
-			gcli.Print("hello, in the demo command\n")
-			return nil
-		},
+		Func: Run,
 	})
-	// app.Run(nil)
-	readBrewFile()
-	readMacPlayBook()
+	app.Run(nil)
+}
+
+func Run(cmd *gcli.Command, args []string) error {
+	brewDump := getBrewDump()
+	ansibleFile := readFile(inputFile)
+	updatedText := Parse(brewDump, ansibleFile)
+	saveToFile(updatedText)
+	return nil
+}
+
+func Parse(brewDump string, ansibleFile string) string {
+	parseBrewFile(brewDump)
+	readMacPlayBook(ansibleFile)
 	compareSlices(true)
-	appendToFile()
+	return updateAnsible(ansibleFile)
 
 }
-func appendToFile() {
 
-	currentFile, err := ioutil.ReadFile(inputFile)
+func getBrewDump() string {
+	cmd := "HOMEBREW_NO_AUTO_UPDATE=1 brew bundle dump -q  --file=-"
+	out, err := exec.Command("/bin/bash", "-c", cmd).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
+	return string(out)
+}
 
-	currentString := string(currentFile)
-	scanner := bufio.NewScanner(strings.NewReader(currentString))
+func updateAnsible(input string) string {
+
+	scanner := bufio.NewScanner(strings.NewReader(input))
 	var extractingTaps, extractingBrews, extractingCasks, extractingMasses bool
 	totalText := ""
 	packageSuffix := ""
@@ -132,12 +167,12 @@ func appendToFile() {
 		}
 
 	}
-	saveToFile(totalText)
-
+	return totalText
 }
+
 func appendToText(text string, packageSuffix string, slice []lineObject) string {
 	for _, object := range slice {
-		text += packageSuffix + "- " + object.line + "    #" + object.comment + "\n"
+		text += packageSuffix + "- " + object.line + "    # " + object.comment + "\n"
 	}
 	return text
 }
@@ -162,16 +197,11 @@ func leadingWhitespace(line string) string {
 	}
 	return leading
 }
-func readBrewFile() {
 
-	file, err := os.Open("./Brewfile")
+func parseBrewFile(brewDump string) {
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	currentString := string(brewDump)
+	scanner := bufio.NewScanner(strings.NewReader(currentString))
 	// optionally, resize scanner's capacity for lines over 64K, see next example
 
 	for scanner.Scan() {
@@ -193,16 +223,20 @@ func readBrewFile() {
 		log.Fatal(err)
 	}
 }
-func readMacPlayBook() {
 
-	file, err := os.Open(inputFile)
-
+func readFile(path string) string {
+	currentFile, err := ioutil.ReadFile(inputFile)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	return string(currentFile)
+}
+
+func readMacPlayBook(input string) {
+
+	scanner := bufio.NewScanner(strings.NewReader(input))
+
 	textSlice := make([]string, 1)
 	for scanner.Scan() {
 		textSlice = append(textSlice, scanner.Text())
@@ -211,8 +245,6 @@ func readMacPlayBook() {
 
 	for i, text := range textSlice {
 		if text != "" {
-			// fmt.Print(text)
-			// fmt.Println(strings.ReplaceAll(text, " ", "")[0:1] != "-")
 			line := strings.ReplaceAll(text, " ", "")
 			if line[0:1] != "-" && line[0:1] != "#" {
 				extractingBrews = false
@@ -278,8 +310,7 @@ func compareSlices(addAll bool) {
 		packageId := line[len(line)-1]
 		alreadyInstalled, newPackage := stringInSlice(packageId, masSlice)
 		if !alreadyInstalled {
-			newPackage.comment = packageId
-
+			newPackage.comment = "added (" + masName + ") " + time.Now().Format("2006-01-02")
 			if addAll {
 				masNotInstalled = append(masNotInstalled, newPackage)
 				continue
@@ -315,6 +346,7 @@ func compareSlices(addAll bool) {
 		cleanLine := strings.ReplaceAll(strings.ReplaceAll(line[1], "\"", ""), ",", "")
 		alreadyInstalled, newPackage := stringInSlice(cleanLine, caskSlice)
 		if !alreadyInstalled {
+			newPackage.comment = "added " + time.Now().Format("2006-01-02")
 			if addAll {
 				caskNotInstalled = append(caskNotInstalled, newPackage)
 				continue
@@ -332,6 +364,7 @@ func compareSlices(addAll bool) {
 		cleanLine := strings.ReplaceAll(strings.ReplaceAll(line[1], "\"", ""), ",", "")
 		alreadyInstalled, newPackage := stringInSlice(cleanLine, tapSlice)
 		if !alreadyInstalled {
+			newPackage.comment = "added " + time.Now().Format("2006-01-02")
 			if addAll {
 				tabsNotInstalled = append(tabsNotInstalled, newPackage)
 				continue
@@ -358,16 +391,4 @@ func stringInSlice(a string, lineObjects []lineObject) (bool, lineObject) {
 	}
 	return false, lineObject{a, 0, ""}
 
-}
-
-func combineAndSort(slices ...[]lineObject) []lineObject {
-	combined := make([]lineObject, 0)
-	for _, slice := range slices {
-		combined = append(combined, slice...)
-	}
-	sort.Slice(combined, func(i, j int) bool {
-		return combined[i].line < combined[j].line
-
-	})
-	return combined
 }
