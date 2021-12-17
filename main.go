@@ -41,6 +41,7 @@ type lineObject struct {
 var cliOptions = struct {
 	brewDump      string
 	ansibleConfig string
+	all           bool
 }{}
 
 func main() {
@@ -58,6 +59,7 @@ func main() {
 		Config: func(c *gcli.Command) {
 			c.StrOpt(&cliOptions.ansibleConfig, "ansible", "a", "", "path to your ansible mac playbook")
 			c.StrOpt(&cliOptions.brewDump, "brew", "b", "", "path to your brew dump")
+			c.BoolOpt(&cliOptions.all, "all", "", false, "parse all packages")
 		},
 		Func: Run,
 	})
@@ -93,7 +95,7 @@ func Run(cmd *gcli.Command, args []string) error {
 					log.Println(err)
 				}
 				// execute command
-				_, err = exec.Command("/bin/sh", "-c", "wget -P "+path+" -O default.config.yaml https://raw.githubusercontent.com/geerlingguy/mac-dev-playbook/master/default.config.yml ").Output()
+				_, err = exec.Command("/bin/sh", "-c", "wget -P "+path+" -O default.config.yaml https://raw.githubusercontent.com/jufabeck2202/brew-to-mac-ansible-playbook/master/test_files/default.config.empty.yaml ").Output()
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -116,15 +118,15 @@ func Run(cmd *gcli.Command, args []string) error {
 		brewDump = getBrewDump()
 	}
 	ansibleFile := readFile(cliOptions.ansibleConfig)
-	updatedText := Parse(brewDump, ansibleFile)
+	updatedText := Parse(brewDump, ansibleFile, cliOptions.all)
 	saveToFile(updatedText)
 	return nil
 }
 
-func Parse(brewDump string, ansibleFile string) string {
+func Parse(brewDump string, ansibleFile string, all bool) string {
 	parseBrewFile(brewDump)
 	readMacPlayBook(ansibleFile)
-	compareSlices(true)
+	compareSlices(all)
 	return updateAnsible(ansibleFile)
 
 }
