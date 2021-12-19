@@ -1,7 +1,9 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
 project_name: beju
-
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=0
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -9,9 +11,8 @@ before:
     # you may remove this if you don't need go generate
     - go generate ./...
 builds:
-  - env:
-      - CGO_ENABLED=0
-     goos:
+  - binary: beju
+    goos:
       - linux
       - freebsd
       - openbsd
