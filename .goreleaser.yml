@@ -45,7 +45,7 @@ brews:
       email: "ju-fa-beck@t-online.de"
     homepage: "https://juli.sh"
     folder: Formula
-    description: "A tool to help you manage your brew and cask installs using ansible"
+    description: "Tool to helps you manage your brew and cask installs using ansible"
 
 checksum:
   name_template: "checksums.txt"

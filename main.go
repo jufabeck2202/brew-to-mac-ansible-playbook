@@ -47,7 +47,7 @@ var cliOptions = struct {
 func main() {
 	app := gcli.NewApp()
 	app.Version = "1.0.0"
-	app.Desc = "A tool to help you manage your brew and cask installs using ansible"
+	app.Desc = "Tool to helps you manage your brew and cask installs using ansible"
 	// app.SetVerbose(gcli.VerbDebug)
 
 	app.Add(&gcli.Command{
