@@ -1,6 +1,6 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
-project_name: beju
+project_name: brew2ansible
 env:
   - GO111MODULE=on
   - CGO_ENABLED=0
@@ -44,6 +44,7 @@ brews:
       name: "Julian Beck"
       email: "ju-fa-beck@t-online.de"
     homepage: "https://juli.sh"
+    folder: Formula
     description: "A tool to help you manage your brew and cask installs using ansible"
 
 checksum:
