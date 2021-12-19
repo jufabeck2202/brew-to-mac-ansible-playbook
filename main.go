@@ -398,6 +398,7 @@ func compareSlices(addAll bool) {
 		alreadyInstalled, newPackage := stringInSlice(cleanLine, tapSlice)
 		if !alreadyInstalled {
 			newPackage.comment = "added " + time.Now().Format("2006-01-02")
+			//TODO: only add if the brew package contaiing the tab was added!
 			if addAll {
 				tabsNotInstalled = append(tabsNotInstalled, newPackage)
 				continue
